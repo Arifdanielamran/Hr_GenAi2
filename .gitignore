@@ -205,3 +205,22 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Virtual environment
+RagEnv/
+.venv/
+venv/
+env/
+
+# Local vector database
+chroma_langchain_db/
+
+# Environment variables / secrets
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# VS Code settings (optional)
+.vscode/
