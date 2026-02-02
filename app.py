@@ -1,6 +1,8 @@
 import streamlit as st
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
+from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
 from vector import retriever
 
 # ------------------- LLM -------------------
@@ -31,10 +33,20 @@ Context:
 
 Question:
 {question}
-
 """)
 
-chain = prompt | model
+# ------------------- Memory + Chain -------------------
+memory = ConversationBufferMemory(
+    memory_key="chat_history",
+    return_messages=True
+)
+
+chain = ConversationalRetrievalChain.from_llm(
+    llm=model,
+    retriever=retriever,
+    memory=memory,
+    combine_docs_chain=prompt | model
+)
 
 # ------------------- Streamlit UI -------------------
 st.set_page_config(page_title="HR Policy Chatbot", page_icon="🤖")
@@ -54,13 +66,9 @@ if question := st.chat_input("Ask about HR policies..."):
     with st.chat_message("user"):
         st.markdown(question)
 
-    docs = retriever.invoke(question)
-    if not docs:
-        answer = "I don't know"
-    else:
-        context = "\n\n".join(d.page_content for d in docs[:3])
-        response = chain.invoke({"context": context, "question": question})
-        answer = response.content if hasattr(response, "content") else str(response)
+    # Run chain with memory
+    response = chain.invoke({"question": question})
+    answer = response["answer"] if isinstance(response, dict) else str(response)
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
     with st.chat_message("assistant"):
