@@ -1,13 +1,14 @@
 import os
 import glob
+import shutil
 from PyPDF2 import PdfReader
 from langchain_core.documents import Document
 from langchain_ollama import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma   # ✅ updated import
 
 # ---------- PDF folder ----------
-pdf_folder = r"C:\Users\syeda\Documents\RagMiniProject\RagEnv\hr_brochures"
+pdf_folder = r"C:\Users\syeda\Documents\RagMiniProject\Hr_GenAi2\hr_brochures"
 pdf_files = glob.glob(os.path.join(pdf_folder, "*.pdf"))
 
 documents = []
@@ -45,7 +46,6 @@ db_location = "./chroma_langchain_db"
 
 # Always rebuild DB if you want fresh embeddings
 if os.path.exists(db_location):
-    import shutil
     shutil.rmtree(db_location)
 
 vector_store = Chroma(
@@ -54,9 +54,11 @@ vector_store = Chroma(
     persist_directory=db_location
 )
 
-vector_store.add_documents(documents, ids=[doc.id for doc in documents])
-vector_store.persist()
-print(f"✅ Added {len(documents)} document chunks to the vector store.")
+if len(documents) == 0:
+    print("⚠️ No documents found in hr_brochures/")
+else:
+    vector_store.add_documents(documents, ids=[doc.id for doc in documents])
+    print(f"✅ Added {len(documents)} document chunks to the vector store.")
 
 # ---------- RETRIEVER ----------
 retriever = vector_store.as_retriever(search_kwargs={"k": 5})
