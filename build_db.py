@@ -1,3 +1,5 @@
+# ONLY IF YOU ADD NEW FILE INTO VECTOR STORE
+
 import os
 import glob
 import shutil
