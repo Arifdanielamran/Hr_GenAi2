@@ -3,8 +3,5 @@ langchain
 langchain-community
 langchain-ollama
 PyPDF2
-sentence-transformers
 chromadb
-transformers>=4.36.0
-torch
 
