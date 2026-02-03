@@ -55,7 +55,7 @@ if os.path.exists(db_location):
 vector_store = Chroma(
     collection_name="hr_brochures",
     embedding_function=embeddings,
-    persist_directory=db_location
+    persist_directory=None
 )
 
 if len(documents) == 0:
@@ -67,3 +67,4 @@ else:
 
 # ---------- RETRIEVER ----------
 retriever = vector_store.as_retriever(search_kwargs={"k": 5})
+
