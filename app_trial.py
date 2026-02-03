@@ -12,7 +12,7 @@ from transformers import pipeline
 # HuggingFace pipeline (Flan-T5 Base, lightweight & cloud-friendly)
 # Guna task "text2text-generation" dengan Flan-T5
 hf_pipeline = pipeline(
-    task="text2text-generation",
+    task="summarization",
     model="google/flan-t5-base",
     max_new_tokens=256
 )
@@ -158,3 +158,4 @@ if uploaded_files:
         st.success(f"✅ Uploaded and processed {len(uploaded_files)} file(s), {len(documents)} chunks added.")
     except Exception as e:
         st.warning(f"⚠️ Some chunks were skipped due to duplicates.")
+
