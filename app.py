@@ -26,6 +26,8 @@ Follow these rules:
 8. **Explain your reasoning step‑by‑step before writing the Summary and Conclusion.**  
 9. **Keep the Summary under 120 words and the Conclusion under 200 words.**  
 10. **Use professional but approachable language, as if speaking to HR managers and employees.**
+11. **Greetings, Provide list 1-10 of relevant topics**
+
 
 Format your answer exactly like this:
 **Reasoning:** <step‑by‑step explanation of how you derived the answer>  

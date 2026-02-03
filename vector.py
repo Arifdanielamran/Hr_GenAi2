@@ -5,7 +5,7 @@ from PyPDF2 import PdfReader
 from langchain_core.documents import Document
 from langchain_ollama import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_chroma import Chroma   # ✅ updated import
+from langchain_chroma import Chroma   
 
 # ---------- PDF folder ----------
 pdf_folder = r"C:\Users\syeda\Documents\RagMiniProject\Hr_GenAi2\hr_brochures"
