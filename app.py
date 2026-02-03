@@ -6,6 +6,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.documents import Document
 from vector import retriever, vector_store
 
+
 # ------------------- LLM -------------------
 model = ChatOllama(model="llama3.2")
 
