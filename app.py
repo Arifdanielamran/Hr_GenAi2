@@ -1,5 +1,7 @@
 import streamlit as st
+from PyPDF2 import PdfReader
 from langchain_ollama import ChatOllama
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.prompts import ChatPromptTemplate
 from vector import retriever
 
@@ -70,3 +72,40 @@ if question := st.chat_input("Ask about HR policies..."):
     st.session_state.messages.append({"role": "assistant", "content": answer})
     with st.chat_message("assistant"):
         st.markdown(answer)
+
+#add file upload functionality in ui
+uploaded_files = st.file_uploader(
+    "Upload one or more HR brochures (PDF only)", 
+    type=["pdf"], 
+    accept_multiple_files=True
+)
+
+if uploaded_files:
+    documents = []
+    for uploaded_file in uploaded_files:
+        reader = PdfReader(uploaded_file)
+        text = ""
+        for page in reader.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text + "\n"
+
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1000,
+            chunk_overlap=100
+        )
+        chunks = splitter.split_text(text)
+
+        for i, chunk in enumerate(chunks):
+            documents.append(
+                Document(
+                    page_content=chunk,
+                    metadata={"source": uploaded_file.name},
+                    id=f"{uploaded_file.name}-chunk-{i}"
+                )
+            )
+
+    # Add to vector store
+    vector_store.add_documents(documents, ids=[doc.id for doc in documents])
+    vector_store.persist()
+    st.success(f"✅ Uploaded and processed {len(uploaded_files)} file(s), {len(documents)} chunks added.")
