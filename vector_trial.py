@@ -5,10 +5,11 @@ from PyPDF2 import PdfReader
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import HuggingFaceEmbeddings   # ✅ Import HuggingFace embeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings   # ✅ HuggingFace embeddings
 
 # ---------- PDF folder ----------
-pdf_folder = r"C:\Users\syeda\Documents\RagMiniProject\Hr_GenAi2\hr_brochures"
+# ⚠️ Untuk Streamlit Cloud, guna relative path "./hr_brochures"
+pdf_folder = "./hr_brochures"
 pdf_files = glob.glob(os.path.join(pdf_folder, "*.pdf"))
 
 documents = []
@@ -39,15 +40,15 @@ for pdf_file in pdf_files:
         )
 
 # ---------- EMBEDDINGS ----------
-# Replace OllamaEmbeddings with HuggingFaceEmbeddings
 embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"   # ✅ You can change to any HF model
+    model_name="sentence-transformers/all-MiniLM-L6-v2"   # ✅ Stable HF model
 )
 
 # ---------- VECTOR STORE ----------
 db_location = "./chroma_langchain_db"
 
-# Always rebuild DB if you want fresh embeddings
+# ⚠️ Kalau nak rebuild setiap kali run, kekalkan rmtree
+# Kalau nak persist, buang line ni
 if os.path.exists(db_location):
     shutil.rmtree(db_location)
 
@@ -61,6 +62,7 @@ if len(documents) == 0:
     print("⚠️ No documents found in hr_brochures/")
 else:
     vector_store.add_documents(documents, ids=[doc.id for doc in documents])
+    vector_store.persist()
     print(f"✅ Added {len(documents)} document chunks to the vector store.")
 
 # ---------- RETRIEVER ----------
