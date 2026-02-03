@@ -1,13 +1,22 @@
 import streamlit as st
 from PyPDF2 import PdfReader
-from langchain_ollama import ChatOllama
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.documents import Document
 from vector_trial import retriever, vector_store
 
 # ------------------- LLM -------------------
-model = ChatOllama(model="llama3.2")
+from langchain_community.chat_models import ChatHuggingFace
+from transformers import pipeline
+
+# HuggingFace pipeline (Flan-T5 Base, lightweight & cloud-friendly)
+hf_pipeline = pipeline(
+    "text2text-generation",
+    model="google/flan-t5-base",
+    max_new_tokens=512
+)
+
+model = ChatHuggingFace(pipeline=hf_pipeline)
 
 # ------------------- Prompt -------------------
 prompt = ChatPromptTemplate.from_template("""
@@ -133,7 +142,6 @@ if uploaded_files:
         chunks = splitter.split_text(text)
 
         for i, chunk in enumerate(chunks):
-            # Use unique ID with filename + chunk index + session counter
             unique_id = f"{uploaded_file.name}-chunk-{i}-{len(st.session_state.messages)}"
             documents.append(
                 Document(
@@ -143,11 +151,9 @@ if uploaded_files:
                 )
             )
 
-    # Add documents safely (skip duplicates)
     try:
         vector_store.add_documents(documents, ids=[doc.id for doc in documents])
         vector_store.persist()
         st.success(f"✅ Uploaded and processed {len(uploaded_files)} file(s), {len(documents)} chunks added.")
     except Exception as e:
         st.warning(f"⚠️ Some chunks were skipped due to duplicates.")
-
