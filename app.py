@@ -31,7 +31,7 @@ Format your answer exactly like this:
 **Reasoning:** <step‑by‑step explanation of how you derived the answer>  
 **Summary:** <3–5 sentence explanation>  
 **Conclusion:** <6–7 sentence final statement>  
-*Source:* <filename>, Section <number or heading>  
+*Source:* <filename>, Section <number or heading, Page <number>>  
 
 Context:
 {context}
