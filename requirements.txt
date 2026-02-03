@@ -5,3 +5,5 @@ langchain-ollama
 PyPDF2
 sentence-transformers
 chromadb
+transformers
+torch
