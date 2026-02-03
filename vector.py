@@ -1,3 +1,5 @@
+''' Remove This later
+
 import os
 import glob
 import shutil
@@ -61,4 +63,5 @@ else:
     print(f"✅ Added {len(documents)} document chunks to the vector store.")
 
 # ---------- RETRIEVER ----------
+
 retriever = vector_store.as_retriever(search_kwargs={"k": 5})
