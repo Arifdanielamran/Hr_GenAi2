@@ -3,7 +3,8 @@ from PyPDF2 import PdfReader
 from langchain_ollama import ChatOllama
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.prompts import ChatPromptTemplate
-from vector import retriever
+from langchain_core.documents import Document
+from vector import retriever, vector_store
 
 # ------------------- LLM -------------------
 model = ChatOllama(model="llama3.2")
@@ -73,7 +74,6 @@ if question := st.chat_input("Ask about HR policies..."):
     with st.chat_message("assistant"):
         st.markdown(answer)
 
-#add file upload functionality in ui
 uploaded_files = st.file_uploader(
     "Upload one or more HR brochures (PDF only)", 
     type=["pdf"], 
