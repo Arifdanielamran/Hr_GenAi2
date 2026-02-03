@@ -1,5 +1,3 @@
-''' Remove This later
-
 import os
 import glob
 import shutil
@@ -65,3 +63,4 @@ else:
 # ---------- RETRIEVER ----------
 
 retriever = vector_store.as_retriever(search_kwargs={"k": 5})
+
