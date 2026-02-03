@@ -109,7 +109,6 @@ if uploaded_files:
     # ✅ Add documents safely (skip duplicates)
     try:
         vector_store.add_documents(documents, ids=[doc.id for doc in documents])
-        vector_store.persist()
         st.success(f"✅ Uploaded and processed {len(uploaded_files)} file(s), {len(documents)} chunks added.")
     except Exception as e:
         st.warning(f"⚠️ Some chunks were skipped due to duplicates. Details: {e}")
