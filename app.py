@@ -107,5 +107,4 @@ if uploaded_files:
 
     # Add to vector store
     vector_store.add_documents(documents, ids=[doc.id for doc in documents])
-    vector_store.persist()
     st.success(f"✅ Uploaded and processed {len(uploaded_files)} file(s), {len(documents)} chunks added.")
