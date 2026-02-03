@@ -4,7 +4,7 @@ from langchain_ollama import ChatOllama
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.documents import Document
-from vector import retriever, vector_store
+from vector_trial import retriever, vector_store
 
 # ------------------- LLM -------------------
 model = ChatOllama(model="llama3.2")
@@ -150,3 +150,4 @@ if uploaded_files:
         st.success(f"✅ Uploaded and processed {len(uploaded_files)} file(s), {len(documents)} chunks added.")
     except Exception as e:
         st.warning(f"⚠️ Some chunks were skipped due to duplicates.")
+
